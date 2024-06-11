@@ -1,15 +1,32 @@
 //screens/ProfileScreen.js
 import { View, StyleSheet, Text } from "react-native";
 import { Avatar, ListItem, Icon, Switch } from "@rneui/themed";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import storage from "../lib/storage";
 import { useSettings } from "../components/SettingsProvider";
+import * as ImagePicker from "expo-image-picker";
+
 function Profilecreen() {
-  // const [state, setState] = useState({
-  //   showTodoDone: true,
-  // });
   const { preferences, setPreferences } = useSettings();
-  console.log("PREF", preferences);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result.assets[0].uri);
+
+    if (!result.canceled) {
+      setPreferences({ ...preferences, imageFile: result.assets[0].uri });
+      await storage.save({
+        key: "preferences",
+        data: { ...preferences, imageFile: result.assets[0].uri },
+      });
+    }
+  };
 
   const handleChangeShowDone = async (value) => {
     await storage.save({
@@ -28,12 +45,35 @@ function Profilecreen() {
   }, []);
   return (
     <View style={styles.main}>
-      <Avatar
-        rounded
-        icon={{ type: "ionicon", name: "person", color: "whitesmoke" }}
-        containerStyle={{ backgroundColor: "gray" }}
-        size={150}
-      />
+      {preferences.imageFile ? (
+        <>
+          <Avatar
+            rounded
+            source={{ uri: preferences.imageFile }}
+            containerStyle={{ backgroundColor: "gray" }}
+            size={150}
+          >
+            <Avatar.Accessory
+              size={48}
+              style={{ backgroundColor: "blue" }}
+              onPress={pickImage}
+            />
+          </Avatar>
+        </>
+      ) : (
+        <Avatar
+          rounded
+          icon={{ type: "ionicon", name: "person", color: "whitesmoke" }}
+          containerStyle={{ backgroundColor: "gray" }}
+          size={150}
+        >
+          <Avatar.Accessory
+            size={48}
+            style={{ backgroundColor: "blue" }}
+            onPress={pickImage}
+          />
+        </Avatar>
+      )}
       <View style={{ width: 430, padding: 20 }}>
         <ListItem bottomDivider>
           <Icon type="ionicon" name="settings" />

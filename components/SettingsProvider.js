@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import storage from "../lib/storage";
 export const Context = createContext({
-  preferences: { showTodoDone: true },
+  preferences: { showTodoDone: true, imageFile: "" },
   setPreferences: () => {},
 });
 
@@ -10,7 +10,10 @@ export const useSettings = () => {
   return context;
 };
 const SettingsProvider = ({ children }) => {
-  const [preferences, setPreferences] = useState({ showTodoDone: true });
+  const [preferences, setPreferences] = useState({
+    showTodoDone: true,
+    imageFile: "",
+  });
   const getPreferences = async () => {
     const preferences = await storage.load({ key: "preferences" });
     setPreferences(preferences);
