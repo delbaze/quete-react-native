@@ -17,7 +17,6 @@ function Profilecreen() {
       quality: 1,
     });
 
-    console.log(result.assets[0].uri);
 
     if (!result.canceled) {
       setPreferences({ ...preferences, imageFile: result.assets[0].uri });
