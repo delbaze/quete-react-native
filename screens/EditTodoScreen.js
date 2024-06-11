@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import storage from "../lib/storage";
 function EditTodoScreen({ navigation, route }) {
   const [state, setState] = useState("");
+  
   const clear = () => {
     setState(""); //remise à zéro de l'input
     navigation.goBack(); //on revient à la liste
