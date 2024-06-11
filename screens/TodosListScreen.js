@@ -16,10 +16,11 @@ function TodosListScreen({ navigation }) {
     setList(listSorted(todosList));
     setLoading(false);
   };
-  const deleteTodo = (index) => {
+  const deleteTodo = async (index) => {
     const todosList = [...list];
     todosList.splice(index, 1);
     setList(listSorted(todosList));
+    await storage.save({ key: "todoslist", data: listSorted(todosList) });
   };
   const listSorted = (initialList) =>
     initialList.sort((a, b) => {
