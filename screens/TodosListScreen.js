@@ -17,7 +17,7 @@ function TodosListScreen({ navigation }) {
     setLoading(false);
   };
   const deleteTodo = async (index) => {
-    const todosList = [...list];
+    const todosList = list.map((l) ⇒ Object.assign({}, l);
     todosList.splice(index, 1);
     setList(listSorted(todosList));
     await storage.save({ key: "todoslist", data: listSorted(todosList) });
@@ -33,7 +33,7 @@ function TodosListScreen({ navigation }) {
       }
     });
   const changeCheck = async (index) => {
-    const todosList = [...list];
+    const todosList = list.map((l) ⇒ Object.assign({}, l);
     const todo = todosList[index];
     todo.status = todo.status === "undone" ? "done" : "undone";
     await storage.save({ key: "todoslist", data: listSorted(todosList) });
